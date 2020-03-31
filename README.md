@@ -14,7 +14,12 @@ Agregar linea  <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" 
 en el archivo  TP1.iml dentro del tag <content>
 
 
- <`content url="file://$MODULE_DIR$">
+ `<content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>`
+    
+    
+Para ejecutar maven desde la terminal
+
+`mvn clean install `
