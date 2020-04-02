@@ -1,8 +1,18 @@
 package sample.controller;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import sample.model.GeneradorAleatorioJava;
 import sample.model.GeneradorCongruencialLineal;
 import sample.model.IGeneradorAleatorio;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class MainController
 {
@@ -81,4 +91,103 @@ public class MainController
         }
 
     }
+
+    @FXML
+    protected void handleGenerarLinealButtonAction(ActionEvent event) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL urlLocation = getClass().getResource("/sample/view/congruenciaLinealView.fxml");
+        fxmlLoader.setLocation(urlLocation);
+
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Generador Congruencia Lineal");
+            Scene scene = new Scene(anchorPane);
+            stage.setScene(scene);
+            //stage.initOwner(anchorPane.getScene().getWindow());
+            //stage.setMaximized(true);
+//            ((Stage) anchorPane.getScene().getWindow()).close();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    protected void handleGenerarMultiplicativaButtonAction(ActionEvent event) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL urlLocation = getClass().getResource("/sample/view/congruenciaMultiplicativaView.fxml");
+        fxmlLoader.setLocation(urlLocation);
+
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Generador Congruencia Multiplicativa");
+            Scene scene = new Scene(anchorPane);
+            stage.setScene(scene);
+            //stage.initOwner(anchorPane.getScene().getWindow());
+            //stage.setMaximized(true);
+//            ((Stage) anchorPane.getScene().getWindow()).close();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    protected void handleFrecuenciaLenguajeButtonAction(ActionEvent event) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL urlLocation = getClass().getResource("/sample/view/frecuenciaLenguajeView.fxml");
+        fxmlLoader.setLocation(urlLocation);
+
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Prueba Frecuencia Lenguaje");
+            Scene scene = new Scene(anchorPane);
+            stage.setScene(scene);
+            //stage.initOwner(anchorPane.getScene().getWindow());
+            //stage.setMaximized(true);
+//            ((Stage) anchorPane.getScene().getWindow()).close();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    protected void handleFrecuenciaLinealButtonAction(ActionEvent event) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL urlLocation = getClass().getResource("/sample/view/frecuenciaLinealView.fxml");
+        fxmlLoader.setLocation(urlLocation);
+
+        try {
+            AnchorPane anchorPane = fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.setTitle("Prueba Frecuencia Multiplicativa");
+            Scene scene = new Scene(anchorPane);
+            stage.setScene(scene);
+            //stage.initOwner(anchorPane.getScene().getWindow());
+            //stage.setMaximized(true);
+//            ((Stage) anchorPane.getScene().getWindow()).close();
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @FXML
+    protected void handleSalirButtonAction(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
+
 }
