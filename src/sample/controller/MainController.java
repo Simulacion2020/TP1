@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -106,9 +107,7 @@ public class MainController
             stage.setTitle("Generador Congruencia Lineal");
             Scene scene = new Scene(anchorPane);
             stage.setScene(scene);
-            //stage.initOwner(anchorPane.getScene().getWindow());
-            //stage.setMaximized(true);
-//            ((Stage) anchorPane.getScene().getWindow()).close();
+            closeCurrent(event);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -129,9 +128,7 @@ public class MainController
             stage.setTitle("Generador Congruencia Multiplicativa");
             Scene scene = new Scene(anchorPane);
             stage.setScene(scene);
-            //stage.initOwner(anchorPane.getScene().getWindow());
-            //stage.setMaximized(true);
-//            ((Stage) anchorPane.getScene().getWindow()).close();
+            closeCurrent(event);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -152,9 +149,7 @@ public class MainController
             stage.setTitle("Prueba Frecuencia Lenguaje");
             Scene scene = new Scene(anchorPane);
             stage.setScene(scene);
-            //stage.initOwner(anchorPane.getScene().getWindow());
-            //stage.setMaximized(true);
-//            ((Stage) anchorPane.getScene().getWindow()).close();
+            closeCurrent(event);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -175,9 +170,7 @@ public class MainController
             stage.setTitle("Prueba Frecuencia Multiplicativa");
             Scene scene = new Scene(anchorPane);
             stage.setScene(scene);
-            //stage.initOwner(anchorPane.getScene().getWindow());
-            //stage.setMaximized(true);
-//            ((Stage) anchorPane.getScene().getWindow()).close();
+            closeCurrent(event);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -189,6 +182,12 @@ public class MainController
     protected void handleSalirButtonAction(ActionEvent event) {
         Platform.exit();
         System.exit(0);
+    }
+
+    private void closeCurrent(ActionEvent e) {
+        final Node source = (Node) e.getSource();
+        final Stage stage = (Stage) source.getScene().getWindow();
+        stage.close();
     }
 
 }
