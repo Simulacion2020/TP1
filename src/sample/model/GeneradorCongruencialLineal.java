@@ -8,7 +8,7 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
     final private int incremento;
     final private int modulo;
 
-    public GeneradorCongruencialLineal(int aSemilla, int aMultiplicador, int aIncremento, int aModulo)
+    public GeneradorCongruencialLineal(int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo)
     {
         /*
             Validar valores de parametros
@@ -17,22 +17,18 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
             0 < multiplicador < m
             0 <= incremento < m
         */
-
-
         this.semilla = aSemilla;
-        this.multiplicador = aMultiplicador;
+        this.multiplicador = (1 + aConstanteMultiplicador*4);
         this.incremento = aIncremento;
-        this.modulo = aModulo;
+        this.modulo = (int) Math.pow(2, aExponenteModulo);
     }
 
-    @Override
     public int getSemilla() {
         return semilla;
     }
 
-    @Override
     /*
-        Genera un nuevo numero aleatorio a partir de la semilla acual X(i)
+        Genera un nuevo numero aleatorio a partir de la semilla actual X(i)
     */
     public double GenerarAleatorio() {
         double aleatorio;
@@ -44,7 +40,6 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
         return aleatorio;
     }
 
-    @Override
     /*
         genera X(i+1) a partir de la semilla actual X(i)
         Para conocer el valor de la semilla usar getSemilla()

@@ -6,7 +6,7 @@ public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio
     final private int multiplicador;
     final private int modulo;
 
-    public GeneradorCongruencialMultiplicativo(int aSemilla, int aMultiplicador, int aModulo)
+    public GeneradorCongruencialMultiplicativo(int aSemilla, int aConstanteMultiplicador, int aExponenteModulo)
     {
         /*
             Validar valores de parametros
@@ -17,16 +17,14 @@ public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio
 
 
         this.semilla = aSemilla;
-        this.multiplicador = aMultiplicador;
-        this.modulo = aModulo;
+        this.multiplicador = (3 + 8*aConstanteMultiplicador);
+        this.modulo = (int) Math.pow(2, aExponenteModulo);
     }
 
-    @Override
     public int getSemilla() {
         return semilla;
     }
 
-    @Override
     /*
         Genera un nuevo numero aleatorio a partir de la semilla acual X(i)
     */
@@ -40,7 +38,6 @@ public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio
         return aleatorio;
     }
 
-    @Override
     /*
         genera X(i+1) a partir de la semilla actual X(i)
         Para conocer el valor de la semilla usar getSemilla()

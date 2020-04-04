@@ -9,6 +9,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import sample.model.GeneradorAleatorioJava;
 import sample.model.GeneradorCongruencialLineal;
+import sample.model.GeneradorCongruencialMultiplicativo;
 import sample.model.IGeneradorAleatorio;
 
 import java.io.IOException;
@@ -18,8 +19,8 @@ public class MainController
 {
     private int tamañoMuestra;
     private int semillaIngresada;
-    private int moduloIngresado;
-    private int multiplicadorIngresado;
+    private int exponenteModuloIngresado;
+    private int constanteMultiplicadorIngresado;
     private int incrementoIngresado;
     private IGeneradorAleatorio generador;
     private double[] listaAleatorios;
@@ -39,28 +40,28 @@ public class MainController
     }
 
     public void opcionGenerarSecuenciaDeAleatoriosCongruencialLineal
-            (int aTamañoMuestra, int aSemilla, int aMultiplicador, int aIncremento, int aModulo)
+            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo)
     {
         this.tamañoMuestra = aTamañoMuestra;
         this.semillaIngresada = aSemilla;
-        this.multiplicadorIngresado = aMultiplicador;
+        this.constanteMultiplicadorIngresado = aConstanteMultiplicador;
         this.incrementoIngresado = aIncremento;
-        this.moduloIngresado = aModulo;
+        this.exponenteModuloIngresado = aExponenteModulo;
 
-        generador = new GeneradorCongruencialLineal(semillaIngresada, multiplicadorIngresado, incrementoIngresado, moduloIngresado);
+        generador = new GeneradorCongruencialLineal(semillaIngresada, constanteMultiplicadorIngresado, incrementoIngresado, exponenteModuloIngresado);
 
         generarAleatorios();
     }
 
     public void opcionGenerarSecuenciaDeAleatoriosCongruencialMultiplicativo
-            (int aTamañoMuestra, int aSemilla, int aMultiplicador, int aModulo)
+            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aExponenteModulo)
     {
         this.tamañoMuestra = aTamañoMuestra;
         this.semillaIngresada = aSemilla;
-        this.multiplicadorIngresado = aMultiplicador;
-        this.moduloIngresado = aModulo;
+        this.constanteMultiplicadorIngresado = aConstanteMultiplicador;
+        this.exponenteModuloIngresado = aExponenteModulo;
 
-        generador = new GeneradorCongruencialLineal(semillaIngresada, multiplicadorIngresado, incrementoIngresado, moduloIngresado);
+        generador = new GeneradorCongruencialMultiplicativo(semillaIngresada, constanteMultiplicadorIngresado, exponenteModuloIngresado);
 
         generarAleatorios();
     }
