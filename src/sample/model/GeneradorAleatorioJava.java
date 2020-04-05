@@ -6,9 +6,9 @@ public class GeneradorAleatorioJava implements IGeneradorAleatorio
         return 0;
     }
 
-    public double GenerarAleatorio()
+    public float GenerarAleatorio()
     {
-        return Math.random();
+        return (float) Math.random();
     }
 
     public void SiguienteSemilla() {

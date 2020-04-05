@@ -2,9 +2,9 @@ package sample.model;
 
 public class Estadistica {
 
-    static double obtenerLimiteSuperior(double aListaValores[])
+    public static float obtenerLimiteSuperior(float aListaValores[])
     {
-        double maximo = 0;
+        float maximo = 0;
 
         for (int i = 0; i < aListaValores.length; i++)
             if (maximo < aListaValores[i])
@@ -13,9 +13,9 @@ public class Estadistica {
         return maximo;
     }
 
-    static double obtenerLimiteInferior(double aListaValores[])
+    public static float obtenerLimiteInferior(float aListaValores[])
     {
-        double minimo = aListaValores[0];
+        float minimo = aListaValores[0];
 
         for (int i = 1; i < aListaValores.length; i++)
             if (minimo > aListaValores[i])
@@ -30,15 +30,15 @@ public class Estadistica {
             intervalos[nroIntervalo][0]=LimiteInferior;
             intervalos[nroIntervalo][0]=LimiteSuperior;
      */
-    static double[][] definirIntervalos(double aListaValores[], int aIntervalos)
+    public static float[][] definirIntervalos(float aListaValores[], int aIntervalos)
     {
         //variable de retorno
-        double intervalos[][] = new double[aIntervalos][2];
-        double maximo = obtenerLimiteSuperior(aListaValores);
-        double minimo = obtenerLimiteInferior(aListaValores);
-        double rango = Math.ceil(maximo - minimo);
-        double amplitudIntervalo = rango / aIntervalos;
-        double limiteInferior = minimo - (rango - (maximo - minimo))/2;
+        float intervalos[][] = new float[aIntervalos][2];
+        float maximo = obtenerLimiteSuperior(aListaValores);
+        float minimo = obtenerLimiteInferior(aListaValores);
+        float rango = (float) Math.ceil(maximo - minimo);
+        float amplitudIntervalo = rango / aIntervalos;
+        float limiteInferior = minimo - (rango - (maximo - minimo))/2;
 
         for (int i = 0; i < aIntervalos; i++) {
             intervalos[i][0] = limiteInferior;
@@ -49,7 +49,25 @@ public class Estadistica {
         return intervalos;
     }
 
-    static int[] definirTablaDeFrecuencias(double[][] aIntervalos, double[] aListaValores)
+    public static float[][] definirIntervalos(float aLimiteInferior, float aLimiteSuperior, int aIntervalos)
+    {
+        //variable de retorno
+        float intervalos[][] = new float[aIntervalos][2];
+        float rango = (float) Math.ceil(aLimiteSuperior - aLimiteInferior);
+        float amplitudIntervalo = rango / (float) aIntervalos;
+        float limiteInferior = aLimiteInferior - (rango + aLimiteInferior - aLimiteSuperior)/2;
+
+        for (int i = 0; i < aIntervalos; i++) {
+            intervalos[i][0] = limiteInferior;
+            limiteInferior += amplitudIntervalo;
+            intervalos[i][1] = limiteInferior;
+        }
+
+        return intervalos;
+    }
+
+
+    public static int[] definirTablaDeFrecuencias(float[][] aIntervalos, float[] aListaValores)
     {
         //variable de retorno
         int[] frecuencias = new int[aIntervalos.length];
@@ -67,13 +85,15 @@ public class Estadistica {
             // en caso que el valor sea igual al limite superior
             if (aListaValores[i] <= aIntervalos[aIntervalos.length-1][1])
             {
+                frecuencias[aIntervalos.length-1]++;
                 // Se analiza fila por fila, con el primet limite inferior de un intervalo
                 // se actualiza el contador correspondiente
-                for (int j = 0; j < aIntervalos.length; j++)
+                for (int j = 1; j < aIntervalos.length; j++)
                 {
-                    if ((aListaValores[i] <= aIntervalos[j][0]))
+                    if ((aListaValores[i] < aIntervalos[j][0]))
                     {
-                        frecuencias[j]++;
+                        frecuencias[j-1]++;
+                        frecuencias[aIntervalos.length-1]--;
                         break;
                     }
                 }
@@ -81,5 +101,45 @@ public class Estadistica {
         }
 
         return frecuencias;
+    }
+
+    public static float calcularDesviaciones(int aFrecuenciaEsperada, int aFrecuenciaObservada)
+    {
+        float estadisticoPrueba = 0;
+        float diferencia = aFrecuenciaEsperada - aFrecuenciaObservada;
+        float cuadrado = (float) Math.pow(diferencia, 2);
+        if (aFrecuenciaEsperada != 0)
+            estadisticoPrueba = cuadrado / aFrecuenciaEsperada;
+
+        return estadisticoPrueba;
+    }
+
+    public static float[] calcularDesviaciones(int[] aFrecuenciasEsperadas, int[] aFrecuenciasObservadas)
+    {
+        float[] estadisticoPrueba = new float[aFrecuenciasEsperadas.length];
+
+        for (int i = 0; i < aFrecuenciasEsperadas.length; i++) {
+            estadisticoPrueba[i] = calcularDesviaciones(aFrecuenciasEsperadas[i], aFrecuenciasObservadas[i]);
+        }
+
+        return estadisticoPrueba;
+    }
+
+    public static float calcularEstadisticoPrueba(int[] aFrecuenciasEsperadas, int[] aFrecuenciasObservadas)
+    {
+        float[] desviaciones = calcularDesviaciones(aFrecuenciasEsperadas, aFrecuenciasObservadas);
+        float estadisticoPrueba = calcularEstadisticoPrueba(desviaciones);
+        return estadisticoPrueba;
+    }
+
+    public static float calcularEstadisticoPrueba(float[] aDesviaxiones)
+    {
+        float estadisticoPrueba = 0;
+
+        for (int i = 0; i < aDesviaxiones.length; i++) {
+            estadisticoPrueba += aDesviaxiones[i];
+        }
+
+        return estadisticoPrueba;
     }
 }

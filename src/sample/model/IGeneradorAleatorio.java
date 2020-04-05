@@ -3,6 +3,6 @@ package sample.model;
 public interface IGeneradorAleatorio
 {
     public int getSemilla();
-    public double GenerarAleatorio();
+    public float GenerarAleatorio();
     public void SiguienteSemilla();
 }

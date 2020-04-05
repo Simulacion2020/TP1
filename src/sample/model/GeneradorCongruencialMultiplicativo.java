@@ -28,12 +28,12 @@ public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio
     /*
         Genera un nuevo numero aleatorio a partir de la semilla acual X(i)
     */
-    public double GenerarAleatorio() {
-        double aleatorio;
+    public float GenerarAleatorio() {
+        float aleatorio;
         //Generamos la nueva semilla
         SiguienteSemilla();
         //calculamos el nuevo aleatorio entre 0 y 1
-        aleatorio = ((double) semilla) / ((double)(modulo - 1));
+        aleatorio = ((float) semilla) / ((float)(modulo - 1));
 
         return aleatorio;
     }
