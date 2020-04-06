@@ -157,26 +157,6 @@ public class MainController
 
     }
 
-    @FXML
-    protected void handleFrecuenciaLinealButtonAction(ActionEvent event) {
-
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/frecuenciaLinealView.fxml");
-        fxmlLoader.setLocation(urlLocation);
-
-        try {
-            AnchorPane anchorPane = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Prueba Frecuencia Multiplicativa");
-            Scene scene = new Scene(anchorPane);
-            stage.setScene(scene);
-            closeCurrent(event);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @FXML
     protected void handleSalirButtonAction(ActionEvent event) {
