@@ -28,15 +28,13 @@ public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio 
     /*
         Genera un nuevo numero aleatorio a partir de la semilla acual X(i)
     */
-    public String GenerarAleatorio() {
+    public float GenerarAleatorio() {
         float aleatorio;
         //Generamos la nueva semilla
         SiguienteSemilla();
         //calculamos el nuevo aleatorio entre 0 y 1
         aleatorio = ((float) semilla) / ((float) (modulo - 1));
-        DecimalFormat decimalFormat = new DecimalFormat("#.####");
-        String aleatorioString = decimalFormat.format(aleatorio);
-        return aleatorioString;
+        return aleatorio;
     }
 
     /*

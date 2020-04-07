@@ -23,6 +23,7 @@ import sample.model.IGeneradorAleatorio;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -129,8 +130,8 @@ public class CongruenciaLinealController {
         ObservableList<Map> allData = FXCollections.observableArrayList();
         for (int i = 1; i < max; i++) {
             Map<String, String> dataRow = new HashMap<>();
-
-            String value1 = "" + generador.GenerarAleatorio(); //esta bien esto?
+            DecimalFormat decimalFormat = new DecimalFormat("#.####");
+            String value1 = decimalFormat.format(generador.GenerarAleatorio());
             System.out.println("value1:" + value1);
             String value2 = "" + generador.getSemilla(); // y esto?
             System.out.println("value2:" + value2);
