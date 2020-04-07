@@ -27,7 +27,7 @@
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin></Button>
-            <Button mnemonicParsing="false" onAction="#handleFrecuenciaLenguajeButtonAction" text="Provista por el lenguaje" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" onAction="#handleLenguajeJavaButtonAction" text="Provista por el lenguaje" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
             <Button mnemonicParsing="false" onAction="#handleSalirButtonAction" prefHeight="26.0" prefWidth="85.0" text="Salir" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
          </children>
          <padding>

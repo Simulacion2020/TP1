@@ -137,10 +137,10 @@ public class MainController
     }
 
     @FXML
-    protected void handleFrecuenciaLenguajeButtonAction(ActionEvent event) {
+    protected void handleLenguajeJavaButtonAction(ActionEvent event) {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/frecuenciaLenguajeView.fxml");
+        URL urlLocation = getClass().getResource("/sample/view/LenguajeJavaView.fxml");
         fxmlLoader.setLocation(urlLocation);
 
         try {
@@ -156,6 +156,8 @@ public class MainController
         }
 
     }
+
+
 
 
     @FXML
