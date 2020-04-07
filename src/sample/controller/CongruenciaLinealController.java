@@ -48,16 +48,18 @@ public class CongruenciaLinealController {
     TableView tableLineal;
     @FXML
     TableColumn iCol;
-
     @FXML
-    TableColumn riCol;
+    TableColumn xiCol;
+    @FXML
+    TableColumn xi1Col;
 
     @FXML
     GridPane root;
 
 
     public static final String Column1MapKey = "i";
-    public static final String Column2MapKey = "ri";
+    public static final String Column2MapKey = "xi";
+    public static final String Column3MapKey = "xi+1";
 
 
     @FXML
@@ -86,9 +88,13 @@ public class CongruenciaLinealController {
         iCol.setMinWidth(100);
         iCol.setCellValueFactory(new MapValueFactory<>(Column1MapKey));
 
-        riCol = new TableColumn("ri");
-        riCol.setMinWidth(100);
-        riCol.setCellValueFactory(new MapValueFactory<>(Column2MapKey));
+        xiCol = new TableColumn("xi");
+        xiCol.setMinWidth(100);
+        xiCol.setCellValueFactory(new MapValueFactory<>(Column2MapKey));
+
+        xi1Col = new TableColumn("xi+1");
+        xi1Col.setMinWidth(100);
+        xi1Col.setCellValueFactory(new MapValueFactory<>(Column3MapKey));
 
         Callback<TableColumn<Map, String>, TableCell<Map, String>>
                 cellFactoryForMap = new Callback<TableColumn<Map, String>,
@@ -109,8 +115,9 @@ public class CongruenciaLinealController {
             }
         };
         iCol.setCellFactory(cellFactoryForMap);
-        riCol.setCellFactory(cellFactoryForMap);
-        tableLineal.getColumns().addAll(iCol, riCol);
+        xiCol.setCellFactory(cellFactoryForMap);
+        xi1Col.setCellFactory(cellFactoryForMap);
+        tableLineal.getColumns().addAll(iCol, xiCol, xi1Col);
 
 
         root.add(tableLineal, 0, 1);
@@ -126,17 +133,16 @@ public class CongruenciaLinealController {
 
         IGeneradorAleatorio generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
         System.out.println("Generador Congruancial Lineal");
-        int max = Integer.parseInt(muestralinealtext.getText()); // deberia llegar como parametro?
+        int max = Integer.parseInt(muestralinealtext.getText());
         ObservableList<Map> allData = FXCollections.observableArrayList();
         for (int i = 1; i < max; i++) {
             Map<String, String> dataRow = new HashMap<>();
             DecimalFormat decimalFormat = new DecimalFormat("#.####");
             String value1 = decimalFormat.format(generador.GenerarAleatorio());
-            System.out.println("value1:" + value1);
-            String value2 = "" + generador.getSemilla(); // y esto?
-            System.out.println("value2:" + value2);
-            dataRow.put(Column1MapKey, value1);
+            String value2 = "" + generador.getSemilla();
+            dataRow.put(Column1MapKey, "" + i);
             dataRow.put(Column2MapKey, value2);
+            dataRow.put(Column3MapKey, value1);
 
             allData.add(dataRow);
         }
