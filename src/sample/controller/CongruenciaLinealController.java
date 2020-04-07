@@ -135,7 +135,7 @@ public class CongruenciaLinealController {
         System.out.println("Generador Congruancial Lineal");
         int max = Integer.parseInt(muestralinealtext.getText());
         ObservableList<Map> allData = FXCollections.observableArrayList();
-        for (int i = 1; i < max; i++) {
+        for (int i = 0; i < max; i++) {
             Map<String, String> dataRow = new HashMap<>();
             DecimalFormat decimalFormat = new DecimalFormat("#.####");
             String value1 = decimalFormat.format(generador.GenerarAleatorio());

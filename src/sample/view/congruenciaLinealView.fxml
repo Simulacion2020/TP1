@@ -30,7 +30,7 @@
                         <TextField fx:id="clinealtext" prefHeight="26.0" prefWidth="54.0"/>
                         <Label alignment="CENTER" prefHeight="16.0" prefWidth="27.0" text="g:"/>
                         <TextField fx:id="glinealtext" prefHeight="26.0" prefWidth="58.0"/>
-                        <Label alignment="CENTER" prefHeight="16.0" prefWidth="27.0" text="muestra:"/>
+                        <Label alignment="CENTER" prefHeight="16.0" prefWidth="59.0" text="muestra:"/>
                         <TextField fx:id="muestralinealtext" prefHeight="26.0" prefWidth="59.0"/>
                     </children>
                     <padding>
@@ -48,13 +48,13 @@
                                         <Insets left="5.0" right="5.0"/>
                                     </FlowPane.margin>
                                 </Button>
-                                <Button disable="true" mnemonicParsing="false" text="Siguiente"/>
-                                <Button disable="true" mnemonicParsing="false" text="prueba chi²">
+<!--                                <Button disable="true" mnemonicParsing="false" text="Siguiente"/>-->
+                                <Button fx:id="buttonChiLineal" disable="true" mnemonicParsing="false" text="prueba chi²">
                                     <FlowPane.margin>
                                         <Insets left="5.0" right="5.0"/>
                                     </FlowPane.margin>
                                 </Button>
-                                <Button disable="true" mnemonicParsing="false" text="Histograma"/>
+                                <Button fx:id="buttonHistogramaLineal" disable="true" mnemonicParsing="false" text="Histograma"/>
                                 <Label fx:id="camposInvalidosLinealLabel" textFill="#e11704"/>
                             </children>
                         </FlowPane>
