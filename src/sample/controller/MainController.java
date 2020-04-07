@@ -16,24 +16,21 @@ import sample.model.IGeneradorAleatorio;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainController
-{
+public class MainController {
     private int tamañoMuestra;
     private int semillaIngresada;
     private int exponenteModuloIngresado;
     private int constanteMultiplicadorIngresado;
     private int incrementoIngresado;
     private IGeneradorAleatorio generador;
-    private double[] listaAleatorios;
+    private String[] listaAleatorios;
     private int[] listaSemillas;
 
-    public MainController()
-    {
+    public MainController() {
 
     }
 
-    public void opcionGenerarSecuenciaDeAleatoriosJava(int aTamañoMuestra)
-    {
+    public void opcionGenerarSecuenciaDeAleatoriosJava(int aTamañoMuestra) {
         generador = new GeneradorAleatorioJava();
         tamañoMuestra = aTamañoMuestra;
 
@@ -41,8 +38,7 @@ public class MainController
     }
 
     public void opcionGenerarSecuenciaDeAleatoriosCongruencialLineal
-            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo)
-    {
+            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo) {
         this.tamañoMuestra = aTamañoMuestra;
         this.semillaIngresada = aSemilla;
         this.constanteMultiplicadorIngresado = aConstanteMultiplicador;
@@ -55,8 +51,7 @@ public class MainController
     }
 
     public void opcionGenerarSecuenciaDeAleatoriosCongruencialMultiplicativo
-            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aExponenteModulo)
-    {
+            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aExponenteModulo) {
         this.tamañoMuestra = aTamañoMuestra;
         this.semillaIngresada = aSemilla;
         this.constanteMultiplicadorIngresado = aConstanteMultiplicador;
@@ -67,29 +62,24 @@ public class MainController
         generarAleatorios();
     }
 
-    public void generarAleatorios()
-    {
+    public void generarAleatorios() {
 
-        if (generador != null )
-        {
-            listaAleatorios = new double[tamañoMuestra];
+        if (generador != null) {
+            listaAleatorios = new String[tamañoMuestra];
             listaSemillas = new int[tamañoMuestra];
-            for (int i = 0; i < tamañoMuestra; i++)
-            {
+            for (int i = 0; i < tamañoMuestra; i++) {
                 listaAleatorios[i] = generador.GenerarAleatorio();
-                listaSemillas[i]   = generador.getSemilla();
+                listaSemillas[i] = generador.getSemilla();
             }
-        } else
-        {
+        } else {
 
         }
         mostrar();
     }
 
-    public void mostrar()
-    {
+    public void mostrar() {
         for (int i = 0; i < tamañoMuestra; i++) {
-            System.out.println(listaAleatorios[i] + " " +listaSemillas[i]);
+            System.out.println(listaAleatorios[i] + " " + listaSemillas[i]);
         }
 
     }

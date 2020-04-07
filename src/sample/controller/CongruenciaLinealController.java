@@ -18,7 +18,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import sample.model.Data;
 import sample.model.GeneradorCongruencialLineal;
 import sample.model.IGeneradorAleatorio;
 
@@ -33,15 +32,15 @@ public class CongruenciaLinealController {
     @FXML
     TextField x0linealtext;
     @FXML
-    TextField alinealtext;
+    TextField clinealtext;
     @FXML
     TextField klinealtext;
-    @FXML
-    TextField mlinealtext;
+    //    @FXML
+//    TextField mlinealtext;
     @FXML
     TextField glinealtext;
     @FXML
-    TextField clinealtext;
+    TextField muestralinealtext;
     @FXML
     Label camposInvalidosLinealLabel;
     @FXML
@@ -88,7 +87,7 @@ public class CongruenciaLinealController {
 
         riCol = new TableColumn("ri");
         riCol.setMinWidth(100);
-        riCol.setCellValueFactory(new MapValueFactory<>(Column1MapKey));
+        riCol.setCellValueFactory(new MapValueFactory<>(Column2MapKey));
 
         Callback<TableColumn<Map, String>, TableCell<Map, String>>
                 cellFactoryForMap = new Callback<TableColumn<Map, String>,
@@ -119,21 +118,22 @@ public class CongruenciaLinealController {
 
     private ObservableList<Map> generateDataInMap() {
         //TODO aca hay que revisar muchachos cual es cada campo y cual no deberia ri
-        int semilla = Integer.parseInt(alinealtext.getText());//95
-        int constanteMultiplicador = Integer.parseInt(clinealtext.getText());//31
-        int incremento = Integer.parseInt(glinealtext.getText());//17
-        int exponenteModulo = Integer.parseInt(mlinealtext.getText());//653
+        int semilla = Integer.parseInt(x0linealtext.getText());//95
+        int constanteMultiplicador = Integer.parseInt(klinealtext.getText());//31  a = 1+4k
+        int incremento = Integer.parseInt(clinealtext.getText());//17
+        int exponenteModulo = Integer.parseInt(glinealtext.getText());//653 m=2g
 
         IGeneradorAleatorio generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
         System.out.println("Generador Congruancial Lineal");
-        int max = 10; // deberia llegar como parametro?
+        int max = Integer.parseInt(muestralinealtext.getText()); // deberia llegar como parametro?
         ObservableList<Map> allData = FXCollections.observableArrayList();
         for (int i = 1; i < max; i++) {
             Map<String, String> dataRow = new HashMap<>();
 
             String value1 = "" + generador.GenerarAleatorio(); //esta bien esto?
+            System.out.println("value1:" + value1);
             String value2 = "" + generador.getSemilla(); // y esto?
-
+            System.out.println("value2:" + value2);
             dataRow.put(Column1MapKey, value1);
             dataRow.put(Column2MapKey, value2);
 
@@ -148,32 +148,47 @@ public class CongruenciaLinealController {
             if (x0linealtext.getText().trim().length() == 0) {
                 valido = false;
             } else {
-                Integer.parseInt(x0linealtext.getText());
+                int x0 = Integer.parseInt(x0linealtext.getText());
+                if (x0 < 0) {
+                    valido = false;
+                }
             }
-            if (alinealtext.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                Integer.parseInt(alinealtext.getText());
-            }
+//            if (alinealtext.getText().trim().length() == 0) {
+//                valido = false;
+//            } else {
+//                Integer.parseInt(alinealtext.getText());
+//            }
             if (klinealtext.getText().trim().length() == 0) {
                 valido = false;
             } else {
-                Integer.parseInt(klinealtext.getText());
-            }
-            if (mlinealtext.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                Integer.parseInt(mlinealtext.getText());
-            }
-            if (glinealtext.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                Integer.parseInt(glinealtext.getText());
+                int k = Integer.parseInt(klinealtext.getText());
+                if (k < 0) {
+                    valido = false;
+                }
             }
             if (clinealtext.getText().trim().length() == 0) {
                 valido = false;
             } else {
-                Integer.parseInt(clinealtext.getText());
+                int c = Integer.parseInt(clinealtext.getText());
+                if (c < 0) {
+                    valido = false;
+                }
+            }
+            if (glinealtext.getText().trim().length() == 0) {
+                valido = false;
+            } else {
+                int g = Integer.parseInt(glinealtext.getText());
+                if (g < 0) {
+                    valido = false;
+                }
+            }
+            if (muestralinealtext.getText().trim().length() == 0) {
+                valido = false;
+            } else {
+                int muestra = Integer.parseInt(muestralinealtext.getText());
+                if (muestra < 0) {
+                    valido = false;
+                }
             }
         } catch (Exception e) {
             valido = false;
