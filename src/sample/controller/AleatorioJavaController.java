@@ -10,14 +10,15 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import sample.model.GeneradorCongruencialLineal;
-import sample.model.GeneradorCongruencialMultiplicativo;
+import sample.model.GeneradorAleatorioJava;
 import sample.model.IGeneradorAleatorio;
 
 import java.io.IOException;
@@ -26,32 +27,26 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CongruenciaMultiplicativaController {
+public class AleatorioJavaController {
+
+
     @FXML
-    TextField x0MultiplicativoText;
+    TextField muestraAleatorioJavaText;
     @FXML
-    TextField kMultiplicativoText;
+    Label camposInvalidosAleatorioJavaLabel;
     @FXML
-    TextField gMultiplicativoText;
-    @FXML
-    TextField muestraMultiplicativoText;
-    @FXML
-    Label camposInvalidosMultiplicativoLabel;
-    @FXML
-    TableView tableMultiplicativo;
+    TableView tableAleatorioJava;
     @FXML
     TableColumn iCol;
     @FXML
-    TableColumn xiCol;
-    @FXML
-    TableColumn xi1Col;
+    TableColumn ajCol;
+
     @FXML
     GridPane root;
 
 
     public static final String Column1MapKey = "i";
-    public static final String Column2MapKey = "xi";
-    public static final String Column3MapKey = "x1+i";
+    public static final String Column2MapKey = "Aleatorio";
 
 
     @FXML
@@ -61,32 +56,28 @@ public class CongruenciaMultiplicativaController {
     }
 
     @FXML
-    protected void handleGenerarMultiplicativo(ActionEvent event) {
+    protected void handleGenerarAleatorioJava(ActionEvent event) {
         if (!this.validarCampos()) {
-            camposInvalidosMultiplicativoLabel.setText("Los campos ingresados no son validos");
+            camposInvalidosAleatorioJavaLabel.setText("Los campos ingresados no son validos");
             System.out.println("Los campos ingresados no son validos");
         } else {
-            camposInvalidosMultiplicativoLabel.setText("");
+            camposInvalidosAleatorioJavaLabel.setText("");
             System.out.println("Campos validos, realizamos calculos para generar tabla");
             this.generarTabla();
         }
     }
 
     private void generarTabla() {
-        tableMultiplicativo = new TableView<>(generateDataInMap());
-        tableMultiplicativo.setEditable(true);
+        tableAleatorioJava = new TableView<>(generateDataInMap());
+        tableAleatorioJava.setEditable(true);
 
         iCol = new TableColumn("i");
         iCol.setMinWidth(100);
         iCol.setCellValueFactory(new MapValueFactory<>(Column1MapKey));
 
-        xiCol = new TableColumn("xi");
-        xiCol.setMinWidth(100);
-        xiCol.setCellValueFactory(new MapValueFactory<>(Column2MapKey));
-
-        xi1Col = new TableColumn("xi+1");
-        xi1Col.setMinWidth(100);
-        xi1Col.setCellValueFactory(new MapValueFactory<>(Column3MapKey));
+        ajCol = new TableColumn("xi");
+        ajCol.setMinWidth(100);
+        ajCol.setCellValueFactory(new MapValueFactory<>(Column2MapKey));
 
         Callback<TableColumn<Map, String>, TableCell<Map, String>>
                 cellFactoryForMap = new Callback<TableColumn<Map, String>,
@@ -98,7 +89,6 @@ public class CongruenciaMultiplicativaController {
                     public String toString(Object t) {
                         return t.toString();
                     }
-
                     @Override
                     public Object fromString(String string) {
                         return string;
@@ -107,33 +97,26 @@ public class CongruenciaMultiplicativaController {
             }
         };
         iCol.setCellFactory(cellFactoryForMap);
-        xiCol.setCellFactory(cellFactoryForMap);
-        xi1Col.setCellFactory(cellFactoryForMap);
-        tableMultiplicativo.getColumns().addAll(iCol, xiCol, xi1Col);
+        ajCol.setCellFactory(cellFactoryForMap);
+        tableAleatorioJava.getColumns().addAll(iCol, ajCol);
 
 
-        root.add(tableMultiplicativo, 0, 1);
+        root.add(tableAleatorioJava, 0, 1);
 
     }
 
     private ObservableList<Map> generateDataInMap() {
         //TODO aca hay que revisar muchachos cual es cada campo y cual no deberia ri
-        int semilla = Integer.parseInt(x0MultiplicativoText.getText());//95
-        int constanteMultiplicador = Integer.parseInt(kMultiplicativoText.getText());//31  a = 1+4k
-        int exponenteModulo = Integer.parseInt(gMultiplicativoText.getText());//653 m=2g
-
-        IGeneradorAleatorio generador = new GeneradorCongruencialMultiplicativo(semilla, constanteMultiplicador, exponenteModulo);
-        System.out.println("Generador Congruancial Multiplicativo");
-        int max = Integer.parseInt(muestraMultiplicativoText.getText());
+        IGeneradorAleatorio generador = new GeneradorAleatorioJava();
+        System.out.println("Generador Aleatorio de Java");
+        int max = Integer.parseInt(muestraAleatorioJavaText.getText());
         ObservableList<Map> allData = FXCollections.observableArrayList();
         for (int i = 1; i <= max; i++) {
             Map<String, String> dataRow = new HashMap<>();
             DecimalFormat decimalFormat = new DecimalFormat("#.####");
             String value1 = decimalFormat.format(generador.GenerarAleatorio());
-            String value2 = "" + generador.getSemilla();
             dataRow.put(Column1MapKey, "" + i);
-            dataRow.put(Column2MapKey, value2);
-            dataRow.put(Column3MapKey, value1);
+            dataRow.put(Column2MapKey, value1);
 
             allData.add(dataRow);
         }
@@ -143,34 +126,10 @@ public class CongruenciaMultiplicativaController {
     private boolean validarCampos() {
         boolean valido = true;
         try {
-            if (x0MultiplicativoText.getText().trim().length() == 0) {
+            if (muestraAleatorioJavaText.getText().trim().length() == 0) {
                 valido = false;
             } else {
-                int x0 = Integer.parseInt(x0MultiplicativoText.getText());
-                if (x0 < 0) {
-                    valido = false;
-                }
-            }
-            if (kMultiplicativoText.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                int k = Integer.parseInt(kMultiplicativoText.getText());
-                if (k < 0) {
-                    valido = false;
-                }
-            }
-            if (gMultiplicativoText.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                int g = Integer.parseInt(gMultiplicativoText.getText());
-                if (g < 0) {
-                    valido = false;
-                }
-            }
-            if (muestraMultiplicativoText.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                int muestra = Integer.parseInt(muestraMultiplicativoText.getText());
+                int muestra = Integer.parseInt(muestraAleatorioJavaText.getText());
                 if (muestra < 0) {
                     valido = false;
                 }
