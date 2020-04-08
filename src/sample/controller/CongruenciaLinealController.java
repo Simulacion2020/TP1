@@ -14,12 +14,12 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.MapValueFactory;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import sample.model.Estadistica;
 import sample.model.GeneradorCongruencialLineal;
 import sample.model.IGeneradorAleatorio;
 
@@ -28,7 +28,6 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 public class CongruenciaLinealController {
 
@@ -46,6 +45,16 @@ public class CongruenciaLinealController {
     @FXML
     Label camposInvalidosLinealLabel;
     @FXML
+    Button buttonChiLineal;
+    @FXML
+    Button buttonHistogramaLineal;
+    @FXML
+    Label labelIntervalosLineal;
+    @FXML
+    ChoiceBox selectIntervalosLineal;
+
+    //Tabla generador lineal
+    @FXML
     TableView tableLineal;
     @FXML
     TableColumn iCol;
@@ -55,19 +64,43 @@ public class CongruenciaLinealController {
     TableColumn xi1Col;
     @FXML
     GridPane root;
-    @FXML
-    Button buttonChiLineal;
-    @FXML
-    Button buttonHistogramaLineal;
-
-
     public static final String Column1MapKey = "i";
     public static final String Column2MapKey = "xi";
     public static final String Column3MapKey = "xi+1";
+    ////
+    //Tabla chicuadrado
+    @FXML
+    TableView tableLinealChi;
+    @FXML
+    TableColumn intervaloColChi;
+    @FXML
+    TableColumn foColChi;
+    @FXML
+    TableColumn feColChi;
+    @FXML
+    TableColumn cColChi;
+    @FXML
+    TableColumn cacColChi;
 
-    int DATA_SIZE = 10;
-    float data[] = new float[DATA_SIZE];
-    int group[] = new int[10]; //cantidad de intervalos
+    public static final String ColumnIntervaloMapKeyChi = "intervalo";
+    public static final String ColumnFOMapKeyChi = "fo";
+    public static final String ColumnFEMapKeyChi = "fe";
+    public static final String ColumnCMapKeyChi = "C";
+    public static final String ColumnCACMapKeyChi = "C(AC)";
+
+    @FXML
+    TextField estadisticoiLnealtext;
+    ////
+    //Histograma
+    float data[];
+    int group[];
+    float[][] intervalos;
+    int[] frecuencias;
+    int[] frecuenciasEsperadas;
+    float[] desviaciones;
+
+    float[] aListaValoresgenerador;
+    float estadisticoPrueba;
 
 
     @FXML
@@ -84,9 +117,11 @@ public class CongruenciaLinealController {
         } else {
             camposInvalidosLinealLabel.setText("");
             System.out.println("Campos validos, realizamos calculos para generar tabla");
-            this.generarTabla();
+            this.generarTablaGenerador();
             buttonChiLineal.setDisable(false);
             buttonHistogramaLineal.setDisable(false);
+            labelIntervalosLineal.setDisable(false);
+            selectIntervalosLineal.setDisable(false);
         }
     }
 
@@ -155,11 +190,18 @@ public class CongruenciaLinealController {
     //generate dummy random data
     private void prepareData() {
 
-        Random random = new Random();
-        for (int i = 0; i < DATA_SIZE; i++) {
-            data[i] = random.nextFloat();
-            System.out.println(data[i]);
+        int intervaloSelect = Integer.parseInt((String) selectIntervalosLineal.getValue());
+        if (aListaValoresgenerador.length == 0) {
+            System.out.println("la lista esta vacia no se puede continuar");
+        } else {
+
+            data = new float[aListaValoresgenerador.length];
+            group = new int[intervaloSelect]; //cantidad de intervalos
+            for (int i = 0; i < aListaValoresgenerador.length; i++) {
+                data[i] = aListaValoresgenerador[i];
+            }
         }
+
     }
 
     //count data population in groups
@@ -167,7 +209,7 @@ public class CongruenciaLinealController {
         for (int i = 0; i < 10; i++) {
             group[i] = 0;
         }
-        for (int i = 0; i < DATA_SIZE; i++) {
+        for (int i = 0; i < aListaValoresgenerador.length; i++) {
             if (data[i] <= 0.1) {
                 group[0]++;
             } else if (data[i] <= 0.2) {
@@ -202,7 +244,8 @@ public class CongruenciaLinealController {
             AnchorPane anchorPane = fxmlLoader.load();
             Stage stage = new Stage();
             stage.setTitle("Prueba Chi²");
-            Scene scene = new Scene(anchorPane);
+            float estadistico = generarPruebaFrecuencia();
+            Scene scene = generarTablaChi(estadistico);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -210,7 +253,103 @@ public class CongruenciaLinealController {
         }
     }
 
-    private void generarTabla() {
+    private Scene generarTablaChi(float estadistico) {
+        tableLinealChi = new TableView<>(generateDataInMapChi());
+        tableLinealChi.setEditable(true);
+
+        intervaloColChi = new TableColumn("intervalo");
+        intervaloColChi.setMinWidth(100);
+        intervaloColChi.setCellValueFactory(new MapValueFactory<>(ColumnIntervaloMapKeyChi));
+
+        foColChi = new TableColumn("fo");
+        foColChi.setMinWidth(100);
+        foColChi.setCellValueFactory(new MapValueFactory<>(ColumnFOMapKeyChi));
+
+        feColChi = new TableColumn("fe");
+        feColChi.setMinWidth(100);
+        feColChi.setCellValueFactory(new MapValueFactory<>(ColumnFEMapKeyChi));
+
+        cColChi = new TableColumn("C");
+        cColChi.setMinWidth(100);
+        cColChi.setCellValueFactory(new MapValueFactory<>(ColumnCMapKeyChi));
+
+
+        cacColChi = new TableColumn("C(AC)");
+        cacColChi.setMinWidth(100);
+        cacColChi.setCellValueFactory(new MapValueFactory<>(ColumnCACMapKeyChi));
+
+        Callback<TableColumn<Map, String>, TableCell<Map, String>>
+                cellFactoryForMap = new Callback<TableColumn<Map, String>,
+                TableCell<Map, String>>() {
+            @Override
+            public TableCell call(TableColumn p) {
+                return new TextFieldTableCell(new StringConverter() {
+                    @Override
+                    public String toString(Object t) {
+                        return t.toString();
+                    }
+
+                    @Override
+                    public Object fromString(String string) {
+                        return string;
+                    }
+                });
+            }
+        };
+        intervaloColChi.setCellFactory(cellFactoryForMap);
+        foColChi.setCellFactory(cellFactoryForMap);
+        feColChi.setCellFactory(cellFactoryForMap);
+        cColChi.setCellFactory(cellFactoryForMap);
+        cacColChi.setCellFactory(cellFactoryForMap);
+        tableLinealChi.getColumns().addAll(intervaloColChi, foColChi, feColChi, cColChi, cacColChi);
+        GridPane rootChi = new GridPane();
+        rootChi.add(tableLinealChi, 0, 0);
+        estadisticoiLnealtext = new TextField();
+        estadisticoiLnealtext.setText("Valor Calculado: " + estadistico);
+        rootChi.add(estadisticoiLnealtext, 0, 1);
+
+
+        Scene scene = new Scene(rootChi, 550, 300);
+        return scene;
+
+    }
+
+    private ObservableList<Map> generateDataInMapChi() {
+        ObservableList<Map> allData = FXCollections.observableArrayList();
+        int acumulado = 0;
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        for (int i = 0; i < Integer.parseInt((String) selectIntervalosLineal.getValue()); i++) {
+            Map<String, String> dataRow = new HashMap<>();
+
+
+            dataRow.put(ColumnIntervaloMapKeyChi, decimalFormat.format(intervalos[i][0]) + " / " + decimalFormat.format(intervalos[i][1]));
+            dataRow.put(ColumnFOMapKeyChi, "" + frecuencias[i]);
+            dataRow.put(ColumnFEMapKeyChi, "" + frecuenciasEsperadas[i]);
+            dataRow.put(ColumnCMapKeyChi, "" + desviaciones[i]);
+            acumulado += desviaciones[i];
+            dataRow.put(ColumnCACMapKeyChi, "" + acumulado);
+
+            allData.add(dataRow);
+        }
+        return allData;
+    }
+
+    private float generarPruebaFrecuencia() {
+        int intervaloSelect = Integer.parseInt((String) selectIntervalosLineal.getValue());
+
+        intervalos = Estadistica.definirIntervalos(aListaValoresgenerador, intervaloSelect);
+        frecuencias = Estadistica.definirTablaDeFrecuencias(intervalos, aListaValoresgenerador);
+        int frecuenciaEsperada = Integer.parseInt(muestralinealtext.getText()) / intervaloSelect;
+        frecuenciasEsperadas = new int[intervaloSelect];
+        for (int i = 0; i < intervaloSelect; i++) {
+            frecuenciasEsperadas[i] = frecuenciaEsperada;
+        }
+        desviaciones = Estadistica.calcularDesviaciones(frecuenciasEsperadas, frecuencias);
+        estadisticoPrueba = Estadistica.calcularEstadisticoPrueba(desviaciones);
+        return estadisticoPrueba;
+    }
+
+    private void generarTablaGenerador() {
         tableLineal = new TableView<>(generateDataInMap());
         tableLineal.setEditable(true);
 
@@ -255,20 +394,21 @@ public class CongruenciaLinealController {
     }
 
     private ObservableList<Map> generateDataInMap() {
-        //TODO aca hay que revisar muchachos cual es cada campo y cual no deberia ri
         int semilla = Integer.parseInt(x0linealtext.getText());//95
         int constanteMultiplicador = Integer.parseInt(klinealtext.getText());//31  a = 1+4k
         int incremento = Integer.parseInt(clinealtext.getText());//17
         int exponenteModulo = Integer.parseInt(glinealtext.getText());//653 m=2g
 
         IGeneradorAleatorio generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
-        System.out.println("Generador Congruancial Lineal");
         int max = Integer.parseInt(muestralinealtext.getText());
         ObservableList<Map> allData = FXCollections.observableArrayList();
+        aListaValoresgenerador = new float[max];
         for (int i = 0; i < max; i++) {
             Map<String, String> dataRow = new HashMap<>();
             DecimalFormat decimalFormat = new DecimalFormat("#.####");
-            String value1 = decimalFormat.format(generador.GenerarAleatorio());
+            float aleatorio = generador.GenerarAleatorio();
+            String value1 = decimalFormat.format(aleatorio);
+            aListaValoresgenerador[i] = aleatorio;
             String value2 = "" + generador.getSemilla();
             dataRow.put(Column1MapKey, "" + i);
             dataRow.put(Column2MapKey, value2);
