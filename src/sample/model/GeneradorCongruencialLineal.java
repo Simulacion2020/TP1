@@ -38,8 +38,6 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
         SiguienteSemilla();
         //calculamos el nuevo aleatorio entre 0 y 1
         aleatorio = ((float) semilla) / ((float) (modulo - 1));
-        DecimalFormat decimalFormat = new DecimalFormat("#.####");
-        decimalFormat.format(aleatorio);
         return aleatorio;
     }
 

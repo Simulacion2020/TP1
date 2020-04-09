@@ -8,5 +8,4 @@ public interface IGeneradorAleatorio {
     public float GenerarAleatorio();
 
     public void SiguienteSemilla();
-
 }

@@ -68,6 +68,7 @@ public class CongruenciaLinealController {
     public static final String Column2MapKey = "xi";
     public static final String Column3MapKey = "xi+1";
     ////
+    DecimalFormat decimalFormat = new DecimalFormat("#.####");
     //Tabla chicuadrado
     @FXML
     TableView tableLinealChi;
@@ -96,8 +97,9 @@ public class CongruenciaLinealController {
     int group[];
     float[][] intervalos;
     int[] frecuencias;
-    int[] frecuenciasEsperadas;
+    float[] frecuenciasEsperadas;
     float[] desviaciones;
+   // float[] desviacionesAcumuladas;
 
     float[] aListaValoresgenerador;
     float estadisticoPrueba;
@@ -316,7 +318,7 @@ public class CongruenciaLinealController {
 
     private ObservableList<Map> generateDataInMapChi() {
         ObservableList<Map> allData = FXCollections.observableArrayList();
-        int acumulado = 0;
+        float acumulado = 0;
         DecimalFormat decimalFormat = new DecimalFormat("#.##");
         for (int i = 0; i < Integer.parseInt((String) selectIntervalosLineal.getValue()); i++) {
             Map<String, String> dataRow = new HashMap<>();
@@ -326,7 +328,7 @@ public class CongruenciaLinealController {
             dataRow.put(ColumnFOMapKeyChi, "" + frecuencias[i]);
             dataRow.put(ColumnFEMapKeyChi, "" + frecuenciasEsperadas[i]);
             dataRow.put(ColumnCMapKeyChi, "" + desviaciones[i]);
-            acumulado += desviaciones[i];
+            acumulado = Estadistica.definirPrecision(acumulado + desviaciones[i]);
             dataRow.put(ColumnCACMapKeyChi, "" + acumulado);
 
             allData.add(dataRow);
@@ -339,8 +341,8 @@ public class CongruenciaLinealController {
 
         intervalos = Estadistica.definirIntervalos(aListaValoresgenerador, intervaloSelect);
         frecuencias = Estadistica.definirTablaDeFrecuencias(intervalos, aListaValoresgenerador);
-        int frecuenciaEsperada = Integer.parseInt(muestralinealtext.getText()) / intervaloSelect;
-        frecuenciasEsperadas = new int[intervaloSelect];
+        float frecuenciaEsperada = Estadistica.definirPrecision(((float) Integer.parseInt(muestralinealtext.getText())) / intervaloSelect);
+        frecuenciasEsperadas = new float[intervaloSelect];
         for (int i = 0; i < intervaloSelect; i++) {
             frecuenciasEsperadas[i] = frecuenciaEsperada;
         }
@@ -357,11 +359,11 @@ public class CongruenciaLinealController {
         iCol.setMinWidth(100);
         iCol.setCellValueFactory(new MapValueFactory<>(Column1MapKey));
 
-        xiCol = new TableColumn("xi");
+        xiCol = new TableColumn("x(i)");
         xiCol.setMinWidth(100);
         xiCol.setCellValueFactory(new MapValueFactory<>(Column2MapKey));
 
-        xi1Col = new TableColumn("xi+1");
+        xi1Col = new TableColumn("Aleatorio");
         xi1Col.setMinWidth(100);
         xi1Col.setCellValueFactory(new MapValueFactory<>(Column3MapKey));
 
@@ -405,11 +407,10 @@ public class CongruenciaLinealController {
         aListaValoresgenerador = new float[max];
         for (int i = 0; i < max; i++) {
             Map<String, String> dataRow = new HashMap<>();
-            DecimalFormat decimalFormat = new DecimalFormat("#.####");
+            String value2 = "" + generador.getSemilla();
             float aleatorio = generador.GenerarAleatorio();
             String value1 = decimalFormat.format(aleatorio);
             aListaValoresgenerador[i] = aleatorio;
-            String value2 = "" + generador.getSemilla();
             dataRow.put(Column1MapKey, "" + i);
             dataRow.put(Column2MapKey, value2);
             dataRow.put(Column3MapKey, value1);
@@ -430,24 +431,11 @@ public class CongruenciaLinealController {
                     valido = false;
                 }
             }
-//            if (alinealtext.getText().trim().length() == 0) {
-//                valido = false;
-//            } else {
-//                Integer.parseInt(alinealtext.getText());
-//            }
             if (klinealtext.getText().trim().length() == 0) {
                 valido = false;
             } else {
                 int k = Integer.parseInt(klinealtext.getText());
                 if (k < 0) {
-                    valido = false;
-                }
-            }
-            if (clinealtext.getText().trim().length() == 0) {
-                valido = false;
-            } else {
-                int c = Integer.parseInt(clinealtext.getText());
-                if (c < 0) {
                     valido = false;
                 }
             }
@@ -459,6 +447,14 @@ public class CongruenciaLinealController {
                     valido = false;
                 }
             }
+            if (clinealtext.getText().trim().length() == 0) {
+                valido = false;
+            } else {
+                int c = Integer.parseInt(clinealtext.getText());
+                if (c < 0) {
+                    valido = false;
+                }
+            }
             if (muestralinealtext.getText().trim().length() == 0) {
                 valido = false;
             } else {
@@ -467,6 +463,7 @@ public class CongruenciaLinealController {
                     valido = false;
                 }
             }
+
         } catch (Exception e) {
             valido = false;
         }

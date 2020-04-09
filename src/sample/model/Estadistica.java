@@ -1,5 +1,7 @@
 package sample.model;
 
+import java.text.DecimalFormat;
+
 public class Estadistica {
 
     public static float obtenerLimiteSuperior(float aListaValores[])
@@ -37,18 +39,28 @@ public class Estadistica {
         float maximo = obtenerLimiteSuperior(aListaValores);
         float minimo = obtenerLimiteInferior(aListaValores);
         float rango = (float) Math.ceil(maximo - minimo);
-        float amplitudIntervalo = rango / aIntervalos;
+     //   float rango =1;
+        float amplitudIntervalo = definirPrecision(rango / aIntervalos);
         float limiteInferior = minimo - (rango - (maximo - minimo))/2;
-
+      //  float limiteInferior = 0;
         for (int i = 0; i < aIntervalos; i++) {
             intervalos[i][0] = limiteInferior;
-            limiteInferior += amplitudIntervalo;
+            limiteInferior = definirPrecision(limiteInferior + amplitudIntervalo);
             intervalos[i][1] = limiteInferior;
         }
 
         return intervalos;
     }
 
+    public static float definirPrecision(float aFlotante)
+    {
+        float resultado;
+        final int PRECISION = 10000;
+
+        resultado = (float) Math.floor(aFlotante*PRECISION);
+        aFlotante = resultado/PRECISION;
+        return resultado/PRECISION;
+    }
     public static float[][] definirIntervalos(float aLimiteInferior, float aLimiteSuperior, int aIntervalos)
     {
         //variable de retorno
@@ -103,7 +115,7 @@ public class Estadistica {
         return frecuencias;
     }
 
-    public static float calcularDesviaciones(int aFrecuenciaEsperada, int aFrecuenciaObservada)
+    public static float calcularDesviaciones(float aFrecuenciaEsperada, int aFrecuenciaObservada)
     {
         float estadisticoPrueba = 0;
         float diferencia = aFrecuenciaEsperada - aFrecuenciaObservada;
@@ -114,18 +126,29 @@ public class Estadistica {
         return estadisticoPrueba;
     }
 
-    public static float[] calcularDesviaciones(int[] aFrecuenciasEsperadas, int[] aFrecuenciasObservadas)
+    public static float[] calcularDesviaciones(float[] aFrecuenciasEsperadas, int[] aFrecuenciasObservadas)
     {
         float[] estadisticoPrueba = new float[aFrecuenciasEsperadas.length];
 
         for (int i = 0; i < aFrecuenciasEsperadas.length; i++) {
-            estadisticoPrueba[i] = calcularDesviaciones(aFrecuenciasEsperadas[i], aFrecuenciasObservadas[i]);
+            estadisticoPrueba[i] = definirPrecision(calcularDesviaciones(aFrecuenciasEsperadas[i], aFrecuenciasObservadas[i]));
         }
 
         return estadisticoPrueba;
     }
 
-    public static float calcularEstadisticoPrueba(int[] aFrecuenciasEsperadas, int[] aFrecuenciasObservadas)
+    public static float[] calcularDesviacionesAcumuladas(float[] aDesviaciones)
+    {
+        float[] desviacionesAcumuladas = new float[aDesviaciones.length];
+        desviacionesAcumuladas[0] = aDesviaciones[0];
+        for (int i = 1; i < desviacionesAcumuladas.length; i++) {
+            desviacionesAcumuladas[i] = desviacionesAcumuladas[i-1] + aDesviaciones[i];
+        }
+
+        return desviacionesAcumuladas;
+    }
+
+    public static float calcularEstadisticoPrueba(float[] aFrecuenciasEsperadas, int[] aFrecuenciasObservadas)
     {
         float[] desviaciones = calcularDesviaciones(aFrecuenciasEsperadas, aFrecuenciasObservadas);
         float estadisticoPrueba = calcularEstadisticoPrueba(desviaciones);

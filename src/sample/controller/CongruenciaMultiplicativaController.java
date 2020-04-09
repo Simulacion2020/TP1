@@ -48,6 +48,19 @@ public class CongruenciaMultiplicativaController {
     @FXML
     GridPane root;
 
+    @FXML
+    TextField estadisticoMultiplicativoText;
+    ////
+    //Histograma
+    float data[];
+    int group[];
+    float[][] intervalos;
+    int[] frecuencias;
+    int[] frecuenciasEsperadas;
+    float[] desviaciones;
+
+    float[] aListaValoresgenerador;
+    float estadisticoPrueba;
 
     public static final String Column1MapKey = "i";
     public static final String Column2MapKey = "xi";

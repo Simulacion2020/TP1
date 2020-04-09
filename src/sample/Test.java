@@ -28,7 +28,7 @@ public class Test extends Application {
         float[][] intervalos = Estadistica.definirIntervalos(0,1, 5);
 
         int[] frecuencias = Estadistica.definirTablaDeFrecuencias(intervalos, listaValores);
-        int[] frecuenciasEsperadas = {6,6,6,6,6};
+        float[] frecuenciasEsperadas = {6,6,6,6,6};
         float[] desviaciones = Estadistica.calcularDesviaciones(frecuenciasEsperadas, frecuencias);
 
         for (int i = 0; i < intervalos.length; i++) {
