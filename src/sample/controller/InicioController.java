@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -26,13 +25,13 @@ public class InicioController {
     protected void handleSubmitButtonAction(ActionEvent event) {
 
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/main.fxml");
+        URL urlLocation = getClass().getResource("/sample/view/generadoresView.fxml");
         fxmlLoader.setLocation(urlLocation);
 
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Menu principal");
+            stage.setTitle("Trabajo Practico 1");
             Scene scene = new Scene(anchorPane);
             stage.setScene(scene);
             //stage.initOwner(anchorPane.getScene().getWindow());

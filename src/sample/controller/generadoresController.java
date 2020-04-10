@@ -27,14 +27,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CongruenciaLinealController {
-    //
-    @FXML
-    RadioButton radioLineal;
-    @FXML
-    RadioButton radioMultiplicativo;
-    @FXML
-    RadioButton radioLenguajeJava;
+public class generadoresController {
 
     @FXML
     TextField x0linealtext;
@@ -46,6 +39,16 @@ public class CongruenciaLinealController {
     TextField glinealtext;
     @FXML
     TextField muestralinealtext;
+    @FXML
+    Label x0Label;
+    @FXML
+    Label cLabel;
+    @FXML
+    Label kLabel;
+    @FXML
+    Label gLabel;
+    @FXML
+    Label muestraLabel;
     @FXML
     Label camposInvalidosLinealLabel;
     @FXML
@@ -104,16 +107,77 @@ public class CongruenciaLinealController {
     int[] frecuencias;
     float[] frecuenciasEsperadas;
     float[] desviaciones;
-   // float[] desviacionesAcumuladas;
+    // float[] desviacionesAcumuladas;
 
     float[] aListaValoresgenerador;
     float estadisticoPrueba;
+
+    // Radios para metodos
+    @FXML
+    RadioButton radioLineal;
+    @FXML
+    RadioButton radioMulti;
+    @FXML
+    RadioButton radioLenguaje;
 
 
     @FXML
     protected void handleSalirButtonAction(ActionEvent event) {
         Platform.exit();
         System.exit(0);
+    }
+
+    @FXML
+    protected void habilitarMetodo(ActionEvent event) {
+        if (radioMulti.isSelected()) {
+            //Deshabilitamos
+            clinealtext.setText("1");
+            clinealtext.setVisible(false);
+            cLabel.setVisible(false);
+            //Habilitamos
+            x0linealtext.setText("");
+            x0linealtext.setVisible(true);
+            x0Label.setVisible(true);
+            glinealtext.setText("");
+            glinealtext.setVisible(true);
+            gLabel.setVisible(true);
+            klinealtext.setText("");
+            klinealtext.setVisible(true);
+            kLabel.setVisible(true);
+            muestralinealtext.setText("");
+        }
+        if (radioLenguaje.isSelected()) {
+            //Deshabilitamos
+            x0linealtext.setText("1");
+            x0linealtext.setVisible(false);
+            x0Label.setVisible(false);
+            clinealtext.setText("1");
+            clinealtext.setVisible(false);
+            cLabel.setVisible(false);
+            glinealtext.setText("1");
+            glinealtext.setVisible(false);
+            gLabel.setVisible(false);
+            klinealtext.setText("1");
+            klinealtext.setVisible(false);
+            kLabel.setVisible(false);
+            muestralinealtext.setText("");
+        }
+        if (radioLineal.isSelected()) {
+            //Habilitamos
+            x0linealtext.setText("");
+            x0linealtext.setVisible(true);
+            x0Label.setVisible(true);
+            clinealtext.setText("");
+            clinealtext.setVisible(true);
+            cLabel.setVisible(true);
+            glinealtext.setText("");
+            glinealtext.setVisible(true);
+            gLabel.setVisible(true);
+            klinealtext.setText("");
+            klinealtext.setVisible(true);
+            kLabel.setVisible(true);
+            muestralinealtext.setText("");
+        }
     }
 
     @FXML
@@ -170,24 +234,9 @@ public class CongruenciaLinealController {
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("Frecuencia");
 
-        for (int i = 0; i < intervalos.length; i++)
-        {
+        for (int i = 0; i < intervalos.length; i++) {
             series1.getData().add(new XYChart.Data(intervalos[i][0] + "-" + intervalos[i][1], frecuencias[i]));
         }
-
-/*
-        series1.getData().add(new XYChart.Data("0-0.1", group[0]));
-        series1.getData().add(new XYChart.Data("0.1-0.2", group[1]));
-        series1.getData().add(new XYChart.Data("0.2-0.3", group[2]));
-        series1.getData().add(new XYChart.Data("0.3-0.4", group[3]));
-        series1.getData().add(new XYChart.Data("0.4-0.5", group[4]));
-
-        series1.getData().add(new XYChart.Data("0.5-0.6", group[5]));
-        series1.getData().add(new XYChart.Data("0.6-0.7", group[6]));
-        series1.getData().add(new XYChart.Data("0.7-0.8", group[7]));
-        series1.getData().add(new XYChart.Data("0.8-0.9", group[8]));
-        series1.getData().add(new XYChart.Data("0.9-1.0", group[9]));
- */
 
         barChart.getData().addAll(series1);
 
@@ -424,7 +473,7 @@ public class CongruenciaLinealController {
         if (radioLenguajeJava.isSelected())
             generador = new GeneradorAleatorioJava();
         else*/
-            generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
+        generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
 
 
         int max = Integer.parseInt(muestralinealtext.getText());
@@ -499,13 +548,13 @@ public class CongruenciaLinealController {
     @FXML
     protected void handleVolverButtonAction(ActionEvent event) {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/main.fxml");
+        URL urlLocation = getClass().getResource("/sample/view/inicio.fxml");
         fxmlLoader.setLocation(urlLocation);
 
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Menu principal");
+            stage.setTitle("Trabajo Practico 1");
             Scene scene = new Scene(anchorPane);
             stage.setScene(scene);
             closeCurrent(event);
