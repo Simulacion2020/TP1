@@ -4,9 +4,15 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import sample.model.GeneradorAleatorioJava;
 import sample.model.GeneradorCongruencialLineal;
@@ -16,8 +22,7 @@ import sample.model.IGeneradorAleatorio;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainController
-{
+public class MainController {
     private int tamañoMuestra;
     private int semillaIngresada;
     private int exponenteModuloIngresado;
@@ -27,13 +32,21 @@ public class MainController
     private double[] listaAleatorios;
     private int[] listaSemillas;
 
-    public MainController()
-    {
+    // visual
+    @FXML
+    CheckBox CheckBoxLineal;
+    @FXML
+    CheckBox CheckBoxMultiplicativa;
+    @FXML
+    CheckBox CheckBoxLenguaje;
+    @FXML
+    Label LabelTitle;
+
+    public MainController() {
 
     }
 
-    public void opcionGenerarSecuenciaDeAleatoriosJava(int aTamañoMuestra)
-    {
+    public void opcionGenerarSecuenciaDeAleatoriosJava(int aTamañoMuestra) {
         generador = new GeneradorAleatorioJava();
         tamañoMuestra = aTamañoMuestra;
 
@@ -41,8 +54,7 @@ public class MainController
     }
 
     public void opcionGenerarSecuenciaDeAleatoriosCongruencialLineal
-            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo)
-    {
+            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo) {
         this.tamañoMuestra = aTamañoMuestra;
         this.semillaIngresada = aSemilla;
         this.constanteMultiplicadorIngresado = aConstanteMultiplicador;
@@ -55,8 +67,7 @@ public class MainController
     }
 
     public void opcionGenerarSecuenciaDeAleatoriosCongruencialMultiplicativo
-            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aExponenteModulo)
-    {
+            (int aTamañoMuestra, int aSemilla, int aConstanteMultiplicador, int aExponenteModulo) {
         this.tamañoMuestra = aTamañoMuestra;
         this.semillaIngresada = aSemilla;
         this.constanteMultiplicadorIngresado = aConstanteMultiplicador;
@@ -67,29 +78,24 @@ public class MainController
         generarAleatorios();
     }
 
-    public void generarAleatorios()
-    {
+    public void generarAleatorios() {
 
-        if (generador != null )
-        {
+        if (generador != null) {
             listaAleatorios = new double[tamañoMuestra];
             listaSemillas = new int[tamañoMuestra];
-            for (int i = 0; i < tamañoMuestra; i++)
-            {
+            for (int i = 0; i < tamañoMuestra; i++) {
                 listaAleatorios[i] = generador.GenerarAleatorio();
-                listaSemillas[i]   = generador.getSemilla();
+                listaSemillas[i] = generador.getSemilla();
             }
-        } else
-        {
+        } else {
 
         }
         mostrar();
     }
 
-    public void mostrar()
-    {
+    public void mostrar() {
         for (int i = 0; i < tamañoMuestra; i++) {
-            System.out.println(listaAleatorios[i] + " " +listaSemillas[i]);
+            System.out.println(listaAleatorios[i] + " " + listaSemillas[i]);
         }
 
     }
@@ -97,16 +103,49 @@ public class MainController
     @FXML
     protected void handleGenerarLinealButtonAction(ActionEvent event) {
 
+        String title = "";
+        String location = "";
+        String color = "#0076a3";
+        int left = 10;
+        int top = 10;
+        int size = 30;
+        if (CheckBoxLineal.isSelected()) {
+            title = "Generador Congruencia Lineal";
+            location = "/sample/view/congruenciaLinealView.fxml";
+        } else if (CheckBoxLenguaje.isSelected()) {
+            title = "Generador Lenguaje";
+            location = "/sample/view/LenguajeJavaView.fxml";
+        } else if (CheckBoxMultiplicativa.isSelected()) {
+            title = "Generador Congruencia Multiplicativa";
+            location = "/sample/view/congruenciaMultiplicativaView.fxml";
+        } else {
+            title = "Por favor seleccione un metodo";
+            location = "/sample/view/main.fxml";
+            left = 120;
+            top = 0;
+            color = "#ff0000";
+            size = 15;
+        }
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/congruenciaLinealView.fxml");
+        URL urlLocation = getClass().getResource(location);
         fxmlLoader.setLocation(urlLocation);
 
         try {
             AnchorPane anchorPane = fxmlLoader.load();
             Stage stage = new Stage();
-            stage.setTitle("Generador Congruencia Lineal");
+            LabelTitle = new Label();
+            LabelTitle.setPadding(new Insets(top, 10, 10, left));
+            LabelTitle.setAlignment(Pos.CENTER);
+            LabelTitle.setTextFill(Color.web(color));
+            LabelTitle.setFont(new Font("Arial", size));
+            LabelTitle.setText(title);
+            anchorPane.requestFocus();
+            anchorPane.getChildren().addAll(LabelTitle);
+            stage.setTitle(title);
             Scene scene = new Scene(anchorPane);
+
             stage.setScene(scene);
+
             closeCurrent(event);
             stage.show();
         } catch (IOException e) {
@@ -114,50 +153,6 @@ public class MainController
         }
 
     }
-
-    @FXML
-    protected void handleGenerarMultiplicativaButtonAction(ActionEvent event) {
-
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/congruenciaMultiplicativaView.fxml");
-        fxmlLoader.setLocation(urlLocation);
-
-        try {
-            AnchorPane anchorPane = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Generador Congruencia Multiplicativa");
-            Scene scene = new Scene(anchorPane);
-            stage.setScene(scene);
-            closeCurrent(event);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @FXML
-    protected void handleLenguajeJavaButtonAction(ActionEvent event) {
-
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource("/sample/view/LenguajeJavaView.fxml");
-        fxmlLoader.setLocation(urlLocation);
-
-        try {
-            AnchorPane anchorPane = fxmlLoader.load();
-            Stage stage = new Stage();
-            stage.setTitle("Prueba Frecuencia Lenguaje");
-            Scene scene = new Scene(anchorPane);
-            stage.setScene(scene);
-            closeCurrent(event);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 
 
     @FXML
