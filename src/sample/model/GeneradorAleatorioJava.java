@@ -2,7 +2,7 @@ package sample.model;
 
 public class GeneradorAleatorioJava implements IGeneradorAleatorio
 {
-    public int getSemilla() {
+    public long getSemilla() {
         return 0;
     }
 

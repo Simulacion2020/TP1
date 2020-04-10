@@ -8,8 +8,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -30,7 +29,7 @@ public class MainController {
     private int incrementoIngresado;
     private IGeneradorAleatorio generador;
     private double[] listaAleatorios;
-    private int[] listaSemillas;
+    private long[] listaSemillas;
 
     // visual
     @FXML
@@ -41,6 +40,25 @@ public class MainController {
     CheckBox CheckBoxLenguaje;
     @FXML
     Label LabelTitle;
+
+    @FXML
+    TextField x0linealtext;
+    @FXML
+    TextField clinealtext;
+    @FXML
+    TextField klinealtext;
+    @FXML
+    TextField glinealtext;
+
+    @FXML
+    RadioButton radioLineal;
+    @FXML
+    RadioButton radioMultiplicativo;
+    @FXML
+    RadioButton radioLenguajeJava;
+
+    @FXML
+    ToggleGroup Metodos;
 
     public MainController() {
 
@@ -82,7 +100,7 @@ public class MainController {
 
         if (generador != null) {
             listaAleatorios = new double[tamañoMuestra];
-            listaSemillas = new int[tamañoMuestra];
+            listaSemillas = new long[tamañoMuestra];
             for (int i = 0; i < tamañoMuestra; i++) {
                 listaAleatorios[i] = generador.GenerarAleatorio();
                 listaSemillas[i] = generador.getSemilla();
@@ -109,15 +127,37 @@ public class MainController {
         int left = 10;
         int top = 10;
         int size = 30;
-        if (CheckBoxLineal.isSelected()) {
-            title = "Generador Congruencia Lineal";
-            location = "/sample/view/congruenciaLinealView.fxml";
-        } else if (CheckBoxLenguaje.isSelected()) {
-            title = "Generador Lenguaje";
-            location = "/sample/view/LenguajeJavaView.fxml";
-        } else if (CheckBoxMultiplicativa.isSelected()) {
-            title = "Generador Congruencia Multiplicativa";
-            location = "/sample/view/congruenciaMultiplicativaView.fxml";
+
+        location = "/sample/view/congruenciaLinealView.fxml";
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL urlLocation = getClass().getResource(location);
+        fxmlLoader.setLocation(urlLocation);
+
+        if (radioLineal.isSelected()) {
+            title = "Generador Congruencial Lineal";
+    //        location = "/sample/view/congruenciaLinealView.fxml";
+        } else if (radioLenguajeJava.isSelected()) {
+            title = "Generador Lenguaje Java";
+    //        location = "/sample/view/LenguajeJavaView.fxml";
+
+    /*
+    Deshabilita los campos que no necesita.. pero dan Excepcion
+            x0linealtext.setText("1");
+            x0linealtext.setVisible(false);
+            clinealtext.setText("1");
+            clinealtext.setVisible(false);
+            glinealtext.setText("1");
+            glinealtext.setVisible(false);
+            klinealtext.setText("1");
+            klinealtext.setVisible(false);*/
+        } else if (radioMultiplicativo.isSelected()) {
+            title = "Generador Congruencial Multiplicativa";
+      //      location = "/sample/view/congruenciaMultiplicativaView.fxml";
+
+            /*
+    Deshabilita los campos que no necesita.. pero dan Excepcion
+            clinealtext.setText("1");
+            clinealtext.setVisible(false);*/
         } else {
             title = "Por favor seleccione un metodo";
             location = "/sample/view/main.fxml";
@@ -126,9 +166,6 @@ public class MainController {
             color = "#ff0000";
             size = 15;
         }
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL urlLocation = getClass().getResource(location);
-        fxmlLoader.setLocation(urlLocation);
 
         try {
             AnchorPane anchorPane = fxmlLoader.load();

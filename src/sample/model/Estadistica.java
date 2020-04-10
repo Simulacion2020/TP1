@@ -36,13 +36,11 @@ public class Estadistica {
     {
         //variable de retorno
         float intervalos[][] = new float[aIntervalos][2];
-        float maximo = obtenerLimiteSuperior(aListaValores);
-        float minimo = obtenerLimiteInferior(aListaValores);
-        float rango = (float) Math.ceil(maximo - minimo);
-     //   float rango =1;
+        float maximo = 1;//obtenerLimiteSuperior(aListaValores);
+        float minimo = 0;//obtenerLimiteInferior(aListaValores);
+        float rango = 1;//(float) Math.ceil(maximo - minimo);
         float amplitudIntervalo = definirPrecision(rango / aIntervalos);
-        float limiteInferior = minimo - (rango - (maximo - minimo))/2;
-      //  float limiteInferior = 0;
+        float limiteInferior = 0;//minimo - (rango - (maximo - minimo))/2;
         for (int i = 0; i < aIntervalos; i++) {
             intervalos[i][0] = limiteInferior;
             limiteInferior = definirPrecision(limiteInferior + amplitudIntervalo);
@@ -57,9 +55,8 @@ public class Estadistica {
         float resultado;
         final int PRECISION = 10000;
 
-        resultado = (float) Math.floor(aFlotante*PRECISION);
-        aFlotante = resultado/PRECISION;
-        return resultado/PRECISION;
+        resultado = (float) Math.floor(aFlotante*PRECISION)/PRECISION;
+        return resultado;
     }
     public static float[][] definirIntervalos(float aLimiteInferior, float aLimiteSuperior, int aIntervalos)
     {
@@ -88,6 +85,7 @@ public class Estadistica {
             frecuencias[i] = 0;
         }
 
+        boolean b;
         for (int i = 0; i < aListaValores.length; i++)
         {
             // Si es menor o igual al maximo valor del rango se analiza a cual pertenece.
@@ -110,6 +108,8 @@ public class Estadistica {
                     }
                 }
             }
+            else
+                System.out.println(i);
         }
 
         return frecuencias;

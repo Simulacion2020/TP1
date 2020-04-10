@@ -19,9 +19,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import sample.model.Estadistica;
-import sample.model.GeneradorCongruencialLineal;
-import sample.model.IGeneradorAleatorio;
+import sample.model.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +28,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CongruenciaLinealController {
-
+    //
+    @FXML
+    RadioButton radioLineal;
+    @FXML
+    RadioButton radioMultiplicativo;
+    @FXML
+    RadioButton radioLenguajeJava;
 
     @FXML
     TextField x0linealtext;
@@ -67,7 +71,8 @@ public class CongruenciaLinealController {
     public static final String Column1MapKey = "i";
     public static final String Column2MapKey = "xi";
     public static final String Column3MapKey = "xi+1";
-    ////
+    //
+    IGeneradorAleatorio generador;
     DecimalFormat decimalFormat = new DecimalFormat("#.####");
     //Tabla chicuadrado
     @FXML
@@ -164,6 +169,13 @@ public class CongruenciaLinealController {
 
         XYChart.Series series1 = new XYChart.Series();
         series1.setName("Frecuencia");
+
+        for (int i = 0; i < intervalos.length; i++)
+        {
+            series1.getData().add(new XYChart.Data(intervalos[i][0] + "-" + intervalos[i][1], frecuencias[i]));
+        }
+
+/*
         series1.getData().add(new XYChart.Data("0-0.1", group[0]));
         series1.getData().add(new XYChart.Data("0.1-0.2", group[1]));
         series1.getData().add(new XYChart.Data("0.2-0.3", group[2]));
@@ -175,6 +187,7 @@ public class CongruenciaLinealController {
         series1.getData().add(new XYChart.Data("0.7-0.8", group[7]));
         series1.getData().add(new XYChart.Data("0.8-0.9", group[8]));
         series1.getData().add(new XYChart.Data("0.9-1.0", group[9]));
+ */
 
         barChart.getData().addAll(series1);
 
@@ -341,6 +354,11 @@ public class CongruenciaLinealController {
 
         intervalos = Estadistica.definirIntervalos(aListaValoresgenerador, intervaloSelect);
         frecuencias = Estadistica.definirTablaDeFrecuencias(intervalos, aListaValoresgenerador);
+        int cont = 0;
+        for (int i = 0; i < frecuencias.length; i++) {
+            cont += frecuencias[i];
+        }
+        System.out.println("Total: " + cont);
         float frecuenciaEsperada = Estadistica.definirPrecision(((float) Integer.parseInt(muestralinealtext.getText())) / intervaloSelect);
         frecuenciasEsperadas = new float[intervaloSelect];
         for (int i = 0; i < intervaloSelect; i++) {
@@ -401,7 +419,14 @@ public class CongruenciaLinealController {
         int incremento = Integer.parseInt(clinealtext.getText());//17
         int exponenteModulo = Integer.parseInt(glinealtext.getText());//653 m=2g
 
-        IGeneradorAleatorio generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
+/*        if (radioMultiplicativo.isSelected())
+            generador = new GeneradorCongruencialMultiplicativo(semilla, constanteMultiplicador, exponenteModulo);
+        if (radioLenguajeJava.isSelected())
+            generador = new GeneradorAleatorioJava();
+        else*/
+            generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
+
+
         int max = Integer.parseInt(muestralinealtext.getText());
         ObservableList<Map> allData = FXCollections.observableArrayList();
         aListaValoresgenerador = new float[max];

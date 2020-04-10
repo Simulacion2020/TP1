@@ -6,12 +6,12 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
-    private int semilla;
+    private long semilla;
     final private int multiplicador;
     final private int incremento;
     final private int modulo;
 
-    public GeneradorCongruencialLineal(int aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo) {
+    public GeneradorCongruencialLineal(long aSemilla, int aConstanteMultiplicador, int aIncremento, int aExponenteModulo) {
         /*
             Validar valores de parametros
             0 <= semilla < modulo
@@ -25,7 +25,7 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
         this.modulo = (int) Math.pow(2, aExponenteModulo);
     }
 
-    public int getSemilla() {
+    public long getSemilla() {
         return semilla;
     }
 
@@ -37,7 +37,8 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
         //Generamos la nueva semilla
         SiguienteSemilla();
         //calculamos el nuevo aleatorio entre 0 y 1
-        aleatorio = ((float) semilla) / ((float) (modulo - 1));
+        aleatorio = ((float) semilla) / (modulo - 1);
+        aleatorio = Estadistica.definirPrecision(aleatorio);
         return aleatorio;
     }
 
@@ -46,7 +47,8 @@ public class GeneradorCongruencialLineal implements IGeneradorAleatorio {
         Para conocer el valor de la semilla usar getSemilla()
     */
     public void SiguienteSemilla() {
-        semilla = (multiplicador * semilla + incremento) % (modulo);
+        semilla = (multiplicador * semilla + incremento);
+        semilla = semilla % (modulo);
     }
 
 

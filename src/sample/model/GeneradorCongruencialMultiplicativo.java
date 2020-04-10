@@ -3,7 +3,7 @@ package sample.model;
 import java.text.DecimalFormat;
 
 public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio {
-    private int semilla;
+    private long semilla;
     final private int multiplicador;
     final private int modulo;
 
@@ -21,7 +21,7 @@ public class GeneradorCongruencialMultiplicativo implements IGeneradorAleatorio 
         this.modulo = (int) Math.pow(2, aExponenteModulo);
     }
 
-    public int getSemilla() {
+    public long getSemilla() {
         return semilla;
     }
 

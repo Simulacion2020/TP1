@@ -20,7 +20,16 @@
                 <Label alignment="CENTER" contentDisplay="CENTER" text="Seleccione el metodo para generar numeros aleatorios:  " GridPane.halignment="CENTER" />
             <VBox fx:id="checkMultiplicativa" prefHeight="177.0" prefWidth="532.0" GridPane.rowIndex="1">
                <children>
-                  <CheckBox fx:id="CheckBoxLineal" mnemonicParsing="false" text="Conguencia lineal o mixta">
+
+                   <RadioButton fx:id="radioLineal" mnemonicParsing="false" text="Generador Conguencial Lineal o Mixto">
+                       <toggleGroup>
+                           <ToggleGroup fx:id="Metodos" />
+                       </toggleGroup>
+                   </RadioButton>
+                   <RadioButton fx:id="radioMultiplicativo" mnemonicParsing="false" text="Generador Congruencial Multiplicativo" toggleGroup="$Metodos" />
+                   <RadioButton fx:id="radioLenguajeJava" mnemonicParsing="false" text="Generador Lenguaje Java" toggleGroup="$Metodos" />
+                 <!--
+                   <CheckBox fx:id="CheckBoxLineal" mnemonicParsing="false" text="">
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
                      </padding>
@@ -35,6 +44,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </CheckBox>
+                  -->
                   <Button fx:id="buttonGeneara" mnemonicParsing="false" onAction="#handleGenerarLinealButtonAction" text="Generar">
                      <VBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
