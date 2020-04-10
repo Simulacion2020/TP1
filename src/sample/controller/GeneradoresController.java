@@ -27,7 +27,7 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class generadoresController {
+public class GeneradoresController {
 
     @FXML
     TextField x0linealtext;
@@ -134,6 +134,8 @@ public class generadoresController {
             clinealtext.setText("1");
             clinealtext.setVisible(false);
             cLabel.setVisible(false);
+            if(tableLineal != null)
+            tableLineal.setVisible(false);
             //Habilitamos
             x0linealtext.setText("");
             x0linealtext.setVisible(true);
@@ -161,6 +163,8 @@ public class generadoresController {
             klinealtext.setVisible(false);
             kLabel.setVisible(false);
             muestralinealtext.setText("");
+            if(tableLineal != null)
+                tableLineal.setVisible(false);
         }
         if (radioLineal.isSelected()) {
             //Habilitamos
@@ -177,6 +181,8 @@ public class generadoresController {
             klinealtext.setVisible(true);
             kLabel.setVisible(true);
             muestralinealtext.setText("");
+            if(tableLineal != null)
+                tableLineal.setVisible(false);
         }
     }
 
@@ -468,11 +474,11 @@ public class generadoresController {
         int incremento = Integer.parseInt(clinealtext.getText());//17
         int exponenteModulo = Integer.parseInt(glinealtext.getText());//653 m=2g
 
-/*        if (radioMultiplicativo.isSelected())
+       if (radioMulti.isSelected())
             generador = new GeneradorCongruencialMultiplicativo(semilla, constanteMultiplicador, exponenteModulo);
-        if (radioLenguajeJava.isSelected())
+        if (radioLenguaje.isSelected())
             generador = new GeneradorAleatorioJava();
-        else*/
+        else
         generador = new GeneradorCongruencialLineal(semilla, constanteMultiplicador, incremento, exponenteModulo);
 
 
