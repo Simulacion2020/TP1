@@ -510,6 +510,10 @@ public class GeneradoresController {
                 if (x0 < 0) {
                     valido = false;
                 }
+                else if (radioMulti.isSelected() && (x0%2 == 0)) {
+                    System.out.println("x0 no es impar");
+                    valido = false;
+                }
             }
             if (klinealtext.getText().trim().length() == 0) {
                 valido = false;
@@ -531,7 +535,12 @@ public class GeneradoresController {
                 valido = false;
             } else {
                 int c = Integer.parseInt(clinealtext.getText());
+                int m = (int) Math.pow(2, Integer.parseInt(glinealtext.getText()));
                 if (c < 0) {
+                    valido = false;
+                }
+                else if (radioLineal.isSelected() && !validarCoprimos(c, m)){
+                    System.out.println( "c y m son coprimos");
                     valido = false;
                 }
             }
@@ -574,5 +583,25 @@ public class GeneradoresController {
         final Node source = (Node) e.getSource();
         final Stage stage = (Stage) source.getScene().getWindow();
         stage.close();
+    }
+
+    /*
+     * Busca Maximo comun multiplo entre 2 numeros
+     * @return int MCM
+     */
+    private static int buscarMCM(int number1, int number2) {
+        //caso base
+        if(number2 == 0){
+            return number1;
+        }
+        return buscarMCM(number2, number1%number2);
+    }
+
+    /*
+     * Valida si son coprimos 2 numeros
+     * @return boolean
+     */
+    private static boolean validarCoprimos(int number1, int number2) {
+        return (buscarMCM(number1, number2) == 1);
     }
 }
