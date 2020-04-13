@@ -315,7 +315,8 @@ public class GeneradoresController {
             Stage stage = new Stage();
             stage.setTitle("Prueba Chi²");
             float estadistico = generarPruebaFrecuencia();
-            Scene scene = generarTablaChi(estadistico);
+            boolean pasaPrueba = pasaPruebaChi2(estadistico);
+            Scene scene = generarTablaChi(estadistico, pasaPrueba);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -323,7 +324,7 @@ public class GeneradoresController {
         }
     }
 
-    private Scene generarTablaChi(float estadistico) {
+    private Scene generarTablaChi(float estadistico, boolean pasaPrueba) {
         tableLinealChi = new TableView<>(generateDataInMapChi());
         tableLinealChi.setEditable(true);
 
@@ -375,7 +376,13 @@ public class GeneradoresController {
         GridPane rootChi = new GridPane();
         rootChi.add(tableLinealChi, 0, 0);
         estadisticoiLnealtext = new TextField();
-        estadisticoiLnealtext.setText("Valor Calculado: " + estadistico);
+        String resultadoPrueba;
+        if (pasaPrueba)
+            resultadoPrueba = "No puede rechazarse la hipótesis";
+        else
+            resultadoPrueba = "Se rechaza la hipótesis";
+
+        estadisticoiLnealtext.setText("Valor Calculado: " + estadistico + " - " + resultadoPrueba);
         rootChi.add(estadisticoiLnealtext, 0, 1);
 
 
@@ -402,6 +409,13 @@ public class GeneradoresController {
             allData.add(dataRow);
         }
         return allData;
+    }
+
+    private boolean pasaPruebaChi2(float aEstadisticoPrueba)
+    {
+        int intervaloSelect = Integer.parseInt((String) selectIntervalosLineal.getValue());
+
+        return Estadistica.PasaPrueba(intervaloSelect, aEstadisticoPrueba);
     }
 
     private float generarPruebaFrecuencia() {
